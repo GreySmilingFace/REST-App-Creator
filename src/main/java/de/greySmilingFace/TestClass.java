@@ -19,6 +19,8 @@ public class TestClass {
 		ProjectGenerator generator = new ProjectGenerator(new PomCreator(new Pom("4.0.0", "de.nuerberger.test",
 				"testProject", "0.0.1-SNAPSHOT", Packaging.WAR.value(), "test", "this is a test")));
 
+		
+		
 		try {
 			generator.generateProject(workspaceDireytory, projectName);
 		} catch (IOException e) {

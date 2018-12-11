@@ -52,5 +52,9 @@ public class ProjectGenerator {
 		}
 
 	}
+	
+	private static void generateEntities() {
+		
+	}
 
 }
