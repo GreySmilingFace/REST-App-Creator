@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import de.greySmilingFace.Object.SimpleEntity;
 
@@ -16,8 +17,8 @@ public class ProjectGenerator {
 		this.creator = creator;
 	}
 
-	public void generateProject(String workspaceDirectory, String projectName, List<SimpleEntity> entities)
-			throws IOException {
+	public void generateProject(String workspaceDirectory, String projectName, List<SimpleEntity> entities,
+			String groupId) throws IOException {
 		StringBuilder projectFolderBuilder = new StringBuilder();
 		projectFolderBuilder.append(workspaceDirectory).append("\\").append(projectName);
 		generateFolders(projectFolderBuilder.toString());
@@ -44,9 +45,17 @@ public class ProjectGenerator {
 
 		creator.writeToFile(projectFolderBuilder.toString(), "pom.xml");
 
+		String temp = projectFolderBuilder.toString() + "\\src\\main\\java";
+		for (String groupIdPathPart : getPathForSources(groupId)) {
+			temp = temp + "\\" + groupIdPathPart;
+			generateFolders(temp);
+		}
+
 		for (SimpleEntity simpleEntity : entities) {
-			creator.writeToFile(projectFolderBuilder.toString() + "\\\\src\\\\main\\\\java",
-					simpleEntity.getName() + ".java");
+			String entityPath = temp + "\\" + simpleEntity.getName() + "\\entities";
+			generateFolders(entityPath);
+			generateFolders(temp + "\\" + simpleEntity.getName() + "\\boundary");
+			creator.writeToFile(entityPath, simpleEntity.getName() + ".java");
 		}
 	}
 
@@ -61,12 +70,14 @@ public class ProjectGenerator {
 		}
 	}
 
-	private static void generateSourcen(List<SimpleEntity> entities, String path) {
+	private static String[] getPathForSources(String groupId) {
+		String[] segs = groupId.split(Pattern.quote("."));
+		return segs;
+	}
 
-	}
-	
-	private static void generateEntities() {
-		
-	}
+	// private static void generateSourcen(List<SimpleEntity> entities, String path)
+	// {
+	//
+	// }
 
 }
