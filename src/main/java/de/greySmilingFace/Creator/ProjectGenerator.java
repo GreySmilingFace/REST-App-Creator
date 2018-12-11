@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
+
+import de.greySmilingFace.Object.SimpleEntity;
 
 public class ProjectGenerator {
 
@@ -13,7 +16,8 @@ public class ProjectGenerator {
 		this.creator = creator;
 	}
 
-	public void generateProject(String workspaceDirectory, String projectName) throws IOException {
+	public void generateProject(String workspaceDirectory, String projectName, List<SimpleEntity> entities)
+			throws IOException {
 		StringBuilder projectFolderBuilder = new StringBuilder();
 		projectFolderBuilder.append(workspaceDirectory).append("\\").append(projectName);
 		generateFolders(projectFolderBuilder.toString());
@@ -39,6 +43,11 @@ public class ProjectGenerator {
 		generateFolders(srcTestresourcesBuilder.toString());
 
 		creator.writeToFile(projectFolderBuilder.toString(), "pom.xml");
+
+		for (SimpleEntity simpleEntity : entities) {
+			creator.writeToFile(projectFolderBuilder.toString() + "\\\\src\\\\main\\\\java",
+					simpleEntity.getName() + ".java");
+		}
 	}
 
 	private static void generateFolders(String directory) {
@@ -50,6 +59,9 @@ public class ProjectGenerator {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	private static void generateSourcen(List<SimpleEntity> entities, String path) {
 
 	}
 	
