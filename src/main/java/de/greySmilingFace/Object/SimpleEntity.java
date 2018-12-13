@@ -29,4 +29,9 @@ public class SimpleEntity {
 		this.attributes = attributes;
 	}
 
+	@Override
+	public String toString() {
+		return "SimpleEntity [name=" + name + ", attributes=" + attributes + "]";
+	}
+
 }

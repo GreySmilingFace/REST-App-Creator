@@ -11,10 +11,11 @@ import de.greySmilingFace.Object.SimpleEntity;
 
 public class ProjectGenerator {
 
-	private PomCreator creator;
+	private PomCreator pomCreator;
+	private EntityCreator entityCreator = new EntityCreator();
 
 	public ProjectGenerator(PomCreator creator) {
-		this.creator = creator;
+		this.pomCreator = creator;
 	}
 
 	public void generateProject(String workspaceDirectory, String projectName, List<SimpleEntity> entities,
@@ -42,20 +43,19 @@ public class ProjectGenerator {
 		StringBuilder srcTestresourcesBuilder = new StringBuilder();
 		srcTestresourcesBuilder.append(projectFolderBuilder.toString()).append("\\src\\test\\resources");
 		generateFolders(srcTestresourcesBuilder.toString());
-
-		creator.writeToFile(projectFolderBuilder.toString(), "pom.xml");
+		pomCreator.writeToFile(projectFolderBuilder.toString(), "pom.xml");
 
 		String temp = projectFolderBuilder.toString() + "\\src\\main\\java";
 		for (String groupIdPathPart : getPathForSources(groupId)) {
 			temp = temp + "\\" + groupIdPathPart;
 			generateFolders(temp);
 		}
-
 		for (SimpleEntity simpleEntity : entities) {
 			String entityPath = temp + "\\" + simpleEntity.getName() + "\\entities";
 			generateFolders(entityPath);
 			generateFolders(temp + "\\" + simpleEntity.getName() + "\\boundary");
-			creator.writeToFile(entityPath, simpleEntity.getName() + ".java");
+			String fileName = simpleEntity.getName() + ".java";
+			entityCreator.writeEntities(simpleEntity, groupId, entityPath, fileName);
 		}
 	}
 
@@ -74,10 +74,5 @@ public class ProjectGenerator {
 		String[] segs = groupId.split(Pattern.quote("."));
 		return segs;
 	}
-
-	// private static void generateSourcen(List<SimpleEntity> entities, String path)
-	// {
-	//
-	// }
 
 }
