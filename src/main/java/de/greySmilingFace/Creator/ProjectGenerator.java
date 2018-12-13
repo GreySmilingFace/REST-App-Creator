@@ -45,7 +45,7 @@ public class ProjectGenerator {
 		creator.writeToFile(projectFolderBuilder.toString(), "pom.xml");
 
 		for (SimpleEntity simpleEntity : entities) {
-			creator.writeToFile(projectFolderBuilder.toString() + "\\\\src\\\\main\\\\java",
+			creator.writeToFile(projectFolderBuilder.toString() + "\\src\\main\\java",
 					simpleEntity.getName() + ".java");
 		}
 	}
